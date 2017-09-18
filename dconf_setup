@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Somehow this first line makes indicator-session disappear?
+# But making the same edit in dconf-editor is fine. Hmm.
+
+# I don't need user switching
+#dconf write /apps/indicator-session/user-show-menu false
+# I like seeing my name
+dconf write /apps/indicator-session/show-real-name-on-panel true
+# Give me all the options
+dconf write /apps/indicator-session/suppress-logout-restart-shutdown false
+
+# Just a time? Come on now.
+dconf write /com/canonical/indicator/datetime/show-date true
+# I need to know if I have to go to work tomorrow
+dconf write /com/canonical/indicator/datetime/show-day true
+# I live in the USA
+dconf write /com/canonical/indicator/datetime/time-format \'12-hour\'
+# Might need to check how old I am
+dconf write /com/canonical/indicator/datetime/show-year true
+# Maybe this will work again someday
+dconf write /com/canonical/indicator/datetime/custom-time-format "'%a %h %d, %Y  %l:%M %p'"
+
+# Why does caps lock even still exist? Seriously. (This one does not seem to work.)
+dconf write /org/gnome/desktop/input-sources/xkb-options "['ctrl:nocaps']"
+
+# I turn my monitor off if I'm not using it.
+dconf write /org/gnome/desktop/screensaver/idle-activation-enabled false
+#dconf write /org/gnome/desktop/session/idle-delay 0
+
+# Show the Recent list by default when opening files
+dconf write /org/gtk/settings/file-chooser/startup-mode recent
+
+# I love this theme, especially with header bar apps
+dconf write /org/gnome/desktop/interface/gtk-theme Numix
+dconf write /org/gnome/desktop/interface/icon-theme Numix
+dconf write /org/gnome/desktop/interface/cursor-theme whiteglass

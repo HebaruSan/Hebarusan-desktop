@@ -1,0 +1,10 @@
+#!/bin/bash
+
+TEMPFILE=$(tempfile -p "$1." -s .ps)
+if MANOPT= man -Tps "$@" > $TEMPFILE
+then
+	(evince $TEMPFILE 2>/dev/null
+	rm $TEMPFILE) &
+else
+	rm $TEMPFILE
+fi

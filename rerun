@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# get most popular or most recent commands out of bash history, present a 'dialog' menu to let the user run them
+
+export HISTFILE=~/.bash_history
+set -o history
+
+cmdmenu=()
+while read -r
+do
+	cmdmenu+=("$REPLY")
+	cmdmenu+=("$(apropos ^$(sed -e 's/\( \||\).*//' <<< "$REPLY")\$ 2>&1 | sed -e 's/^.*\(-\|:\) //')")
+done < <(history \
+	| egrep -v '^ *[0-9]+ +(cd|ls)\>' \
+	| sed -e 's/^ *[0-9]\+ *//' \
+	| sed -e 's/^vim\>/gvim/' \
+	| sort \
+	| uniq -c \
+	| sort -rn \
+	| head -n 25 \
+	| sed -e 's/^ *[0-9]\+ *//')
+
+if [ -n "$DISPLAY" ]
+then
+	CMD=$(zenity --list --title 'Most used commands' --text 'Run what?' \
+		--height 256 --hide-header --column Command --column Description "${cmdmenu[@]}")
+else
+	CMD=$(dialog --no-shadow \
+		--menu 'Most used commands' $(tput lines) $(tput cols) $(tput lines) \
+		"${cmdmenu[@]}" 2>&1 >/dev/tty)
+fi
+
+if [ -n "$CMD" ]
+then
+	if egrep -q '^(ps|w)\>' <<<"$CMD" && egrep -qv '\<less\>' <<<"$CMD"
+	then
+		CMD=$(sed -e 's/^.*$/& | less -+eEF/' <<<"$CMD")
+	fi
+	if [ -n "$DISPLAY" ]
+	then
+		x-terminal-emulator -e "/bin/bash -O expand_aliases -l -c \"$CMD\""
+	else
+		/bin/bash -O expand_aliases -l -c "$CMD"
+	fi
+fi

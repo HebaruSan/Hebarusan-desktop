@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+
+use File::Basename;
+use Cwd;
+
+my $cwd = Cwd::cwd();
+my $name = basename($cwd);
+die "'$name' isn't a good file name!\n" if $name eq '';
+
+opendir DOT, '.';
+my @files = map { "$cwd/$_" } sort {uc($a) cmp uc($b)} grep { !-d $_ && /\.(jpg|cvg|gif|png)$/i } readdir(DOT);
+closedir DOT;
+die "Multiple backgrounds not found!\n" if scalar(@files) < 2;
+
+open XML, ">$name.xml";
+#TODO: Possibly use today's date?
+print XML <<EOHEAD;
+<background>
+	<starttime>
+		<year>2012</year>
+		<month>01</month>
+		<day>01</day>
+		<hour>00</hour>
+		<minute>00</minute>
+		<second>01</second>
+	</starttime>
+
+EOHEAD
+
+my $static_dur = 1795.0,
+	$transition_dur = 5.0;
+
+for (my $i = 0; $i < scalar(@files); ++$i) {
+	my $next = ($i + 1) % scalar(@files);
+	print XML <<EOBG
+	<static>
+		<duration>$static_dur</duration>
+		<file>$files[$i]</file>
+	</static>
+	<transition>
+		<duration>$transition_dur</duration>
+		<from>$files[$i]</from>
+		<to>$files[$next]</to>
+	</transition>
+EOBG
+}
+
+print XML <<EOFOOT;
+</background>
+EOFOOT
+close XML;

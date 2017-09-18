@@ -1,0 +1,4 @@
+[GNOME Session]
+Name=Xmonad/GNOME
+RequiredComponents=gnome-settings-daemon-generic;gnome-panel-generic;compton;xmonad;
+

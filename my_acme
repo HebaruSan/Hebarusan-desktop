@@ -1,0 +1,5 @@
+#!/bin/bash
+
+P9PHOME=$HOME/Downloads/plan9
+
+exec $HOME/9 acme -F $P9PHOME/font/vera/VeraMono/VeraMono.14.font -f $P9PHOME/font/vera/Vera/unicode.14.font $HOME/guide "$@"

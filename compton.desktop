@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=compton -fCF -D5 -I0.05 -O0.05
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=false
+Name[en]=compton
+Name=compton
+Comment[en]=
+Comment=
