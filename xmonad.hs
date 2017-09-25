@@ -228,7 +228,7 @@ main = do
                         -- Small enough to stay out of the way
                         draggerWidth = 4
 
-            }}) ||| ThreeCol 1 (3/100) (1/2) ||| Grid -- 3x3 for >=9 windows (names itself)
+            }}) ||| ThreeCol 1 (3/100) (1/2) ||| Grid False -- 3x3 for >=9 windows (names itself)
 
     } where
 
